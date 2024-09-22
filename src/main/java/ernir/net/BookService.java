@@ -1,0 +1,36 @@
+package ernir.net;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+@ApplicationScoped
+public final class BookService {
+  private final List<Book> books;
+
+  public BookService() {
+    books =
+        List.of(
+            new Book(
+                214240402,
+                "Deathseed",
+                new Author("Sarah Lin", "Sarah", "Lin"),
+                List.of(),
+                Optional.empty(),
+                Optional.empty(),
+                4.52,
+                Optional.empty(),
+                "Kindle Edition",
+                Optional.of(465),
+                Optional.of(2024),
+                Optional.empty(),
+                Optional.of(
+                    new ReadingInfo(
+                        Optional.empty(), LocalDate.of(2024, 7, 28), LocalDate.of(2024, 7, 21)))));
+  }
+
+  public List<Book> findAllBooks() {
+    return books;
+  }
+}
