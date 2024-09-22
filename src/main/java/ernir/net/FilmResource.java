@@ -1,10 +1,8 @@
 package ernir.net;
 
 import io.smallrye.graphql.api.Context;
-import io.smallrye.graphql.api.Subscription;
-import io.smallrye.mutiny.Multi;
-import io.smallrye.mutiny.operators.multi.processors.BroadcastProcessor;
 import jakarta.inject.Inject;
+import java.util.List;
 import org.eclipse.microprofile.graphql.DefaultValue;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
@@ -12,8 +10,6 @@ import org.eclipse.microprofile.graphql.Mutation;
 import org.eclipse.microprofile.graphql.Name;
 import org.eclipse.microprofile.graphql.Query;
 import org.eclipse.microprofile.graphql.Source;
-
-import java.util.List;
 
 @GraphQLApi
 public class FilmResource {

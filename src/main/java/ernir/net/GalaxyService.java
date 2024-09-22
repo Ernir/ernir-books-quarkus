@@ -1,13 +1,13 @@
 package ernir.net;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import static java.util.stream.Collectors.toList;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import static java.util.stream.Collectors.toList;
 
 @ApplicationScoped
 public class GalaxyService {
