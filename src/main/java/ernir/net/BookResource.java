@@ -1,6 +1,5 @@
 package ernir.net;
 
-import jakarta.inject.Inject;
 import java.util.List;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
@@ -8,8 +7,11 @@ import org.eclipse.microprofile.graphql.Query;
 
 @GraphQLApi
 public class BookResource {
+  private final BookService service;
 
-  @Inject BookService service;
+  public BookResource(BookService service) {
+    this.service = service;
+  }
 
   @Query("allBooks")
   @Description("Get all Books")

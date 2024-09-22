@@ -8,8 +8,9 @@ import java.util.Optional;
 @ApplicationScoped
 public final class BookService {
   private final List<Book> books;
+  private final BookData bookData;
 
-  public BookService() {
+  public BookService(BookData bookData) {
     books =
         List.of(
             new Book(
@@ -28,6 +29,7 @@ public final class BookService {
                 Optional.of(
                     new ReadingInfo(
                         Optional.empty(), LocalDate.of(2024, 7, 28), LocalDate.of(2024, 7, 21)))));
+    this.bookData = bookData;
   }
 
   public List<Book> findAllBooks() {
