@@ -7,7 +7,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 @ApplicationScoped
 public class GalaxyService {
@@ -20,23 +20,12 @@ public class GalaxyService {
 
   public GalaxyService() {
 
-    Film aNewHope = new Film();
-    aNewHope.title = "A New Hope";
-    aNewHope.releaseDate = LocalDate.of(1977, Month.MAY, 25);
-    aNewHope.episodeID = 4;
-    aNewHope.director = "George Lucas";
+    Film aNewHope = new Film("A New Hope", LocalDate.of(1977, Month.MAY, 25), 4, "George Lucas");
+    Film theEmpireStrikesBack =
+        new Film("The Empire Strikes Back", LocalDate.of(1980, Month.MAY, 21), 5, "George Lucas");
 
-    Film theEmpireStrikesBack = new Film();
-    theEmpireStrikesBack.title = "The Empire Strikes Back";
-    theEmpireStrikesBack.releaseDate = LocalDate.of(1980, Month.MAY, 21);
-    theEmpireStrikesBack.episodeID = 5;
-    theEmpireStrikesBack.director = "George Lucas";
-
-    Film returnOfTheJedi = new Film();
-    returnOfTheJedi.title = "Return Of The Jedi";
-    returnOfTheJedi.releaseDate = LocalDate.of(1983, Month.MAY, 25);
-    returnOfTheJedi.episodeID = 6;
-    returnOfTheJedi.director = "George Lucas";
+    Film returnOfTheJedi =
+        new Film("Return Of The Jedi", LocalDate.of(1983, Month.MAY, 25), 6, "George Lucas");
 
     films.add(aNewHope);
     films.add(theEmpireStrikesBack);
@@ -79,6 +68,7 @@ public class GalaxyService {
   }
 
   public List<Film> getAllFilms() {
+    System.out.printf("Returning %s films%n", films.size());
     return films;
   }
 
@@ -88,8 +78,8 @@ public class GalaxyService {
 
   public List<Hero> getHeroesByFilm(Film film) {
     return heroes.stream()
-        .filter(hero -> hero.episodeIds.contains(film.episodeID))
-        .collect(Collectors.toList());
+        .filter(hero -> hero.episodeIds.contains(film.episodeID()))
+        .collect(toList());
   }
 
   public void addHero(Hero hero) {
@@ -101,9 +91,7 @@ public class GalaxyService {
   }
 
   public List<Hero> getHeroesBySurname(String surname) {
-    return heroes.stream()
-        .filter(hero -> hero.surname.equals(surname))
-        .collect(Collectors.toList());
+    return heroes.stream().filter(hero -> hero.surname.equals(surname)).collect(toList());
   }
 
   public List<Ally> getAllAllies() {
@@ -120,7 +108,7 @@ public class GalaxyService {
   public List<SearchResult> search(String query) {
     List<Film> matchingFilms =
         films.stream()
-            .filter(film -> film.title.contains(query) || film.director.contains(query))
+            .filter(film -> film.title().contains(query) || film.director().contains(query))
             .toList();
     List<SearchResult> results = new ArrayList<>(matchingFilms);
     List<Character> matchingCharacters =
