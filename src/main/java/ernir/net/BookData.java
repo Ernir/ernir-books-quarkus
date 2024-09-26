@@ -13,18 +13,17 @@ import java.util.Optional;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class BookData {
-  private static final String INPUT_FILE_NAME = "/goodreads_library_export.csv";
 
   private final List<BookRecord> books;
 
-  BookData() {
+  BookData(@ConfigProperty(name = "net.ernir.book.csv-location") String csvLocation) {
     List<CSVRecord> records;
     try (BufferedReader bufferedReader =
-            new BufferedReader(
-                new InputStreamReader(getClass().getResourceAsStream(INPUT_FILE_NAME)));
+            new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(csvLocation)));
         CSVParser csvParser =
             new CSVParser(
                 bufferedReader,

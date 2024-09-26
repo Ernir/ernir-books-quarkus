@@ -33,6 +33,8 @@ public final class BookService {
   }
 
   public List<Book> findAllBooks() {
+    //TODO populate the list
+    bookData.getBooks();
     return books;
   }
 }
