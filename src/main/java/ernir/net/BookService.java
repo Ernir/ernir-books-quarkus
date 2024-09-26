@@ -1,7 +1,7 @@
 package ernir.net;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,25 +11,34 @@ public final class BookService {
   private final BookData bookData;
 
   public BookService(BookData bookData) {
-    books =
-        List.of(
-            new Book(
-                214240402,
-                "Deathseed",
-                new Author("Sarah Lin", "Sarah", "Lin"),
-                List.of(),
-                Optional.empty(),
-                Optional.empty(),
-                4.52,
-                Optional.empty(),
-                "Kindle Edition",
-                Optional.of(465),
-                Optional.of(2024),
-                Optional.empty(),
-                Optional.of(
-                    new ReadingInfo(
-                        Optional.empty(), LocalDate.of(2024, 7, 28), LocalDate.of(2024, 7, 21)))));
     this.bookData = bookData;
+    this.books = bookData.getBooks().stream().map(BookService::from).toList();
+  }
+
+  private static Book from(BookRecord record) {
+    return new Book(
+        Integer.parseInt(record.id()),
+        record.title(),
+        from(record.author(), record.authorLastFirst()),
+        // TODO figure out additional author parsing
+        List.of(),
+        record.isbn(),
+        record.isbn13(),
+        record.averageRating(),
+        Optional.of(new Publisher(record.publisher()))
+            .filter(publisher -> !publisher.name().isBlank()),
+        record.binding(),
+        record.numberOfPages(),
+        record.yearPublished(),
+        record.originalPublicationYear(),
+        Optional.of(record.myRating()),
+        record.dateRead(),
+        record.dateAdded());
+  }
+
+  private static Author from(String authorName, String authorLastFirst) {
+    List<String> names = Arrays.stream(authorLastFirst.split(",")).map(String::strip).toList();
+    return new Author(authorName, names.get(1), names.get(0));
   }
 
   public List<Book> findAllBooks() {

@@ -1,5 +1,6 @@
 package ernir.net;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +17,7 @@ public record Book(
     Optional<Integer> pages,
     Optional<Integer> yearPublished,
     Optional<Integer> originalPublicationYear,
-    Optional<ReadingInfo> readingInfo)
+    Optional<Integer> myRating,
+    Optional<LocalDate> myDateRead,
+    Optional<LocalDate> myDateAdded)
     implements SearchResult {}
