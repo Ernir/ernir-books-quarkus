@@ -16,4 +16,5 @@ public record Book(
     Optional<Integer> pages,
     Optional<Integer> yearPublished,
     Optional<Integer> originalPublicationYear,
-    Optional<ReadingInfo> readingInfo) {}
+    Optional<ReadingInfo> readingInfo)
+    implements SearchResult {}

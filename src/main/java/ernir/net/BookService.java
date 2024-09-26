@@ -33,8 +33,20 @@ public final class BookService {
   }
 
   public List<Book> findAllBooks() {
-    //TODO populate the list
+    // TODO populate the list
     bookData.getBooks();
     return books;
+  }
+
+  public Optional<Book> findBookByTitle(String title) {
+    return books.stream().filter(book -> book.title().equalsIgnoreCase(title)).findFirst();
+  }
+
+  public List<SearchResult> search(String query) {
+    return List.of();
+  }
+
+  public List<Book> getBooksByAuthor(Author author) {
+    return List.of();
   }
 }

@@ -1,9 +1,13 @@
 package ernir.net;
 
+import io.smallrye.graphql.api.Context;
 import java.util.List;
+import java.util.Optional;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
+import org.eclipse.microprofile.graphql.Name;
 import org.eclipse.microprofile.graphql.Query;
+import org.eclipse.microprofile.graphql.Source;
 
 @GraphQLApi
 public class BookResource {
@@ -15,7 +19,23 @@ public class BookResource {
 
   @Query("allBooks")
   @Description("Get all Books")
-  public List<Book> getAllFilms() {
+  public List<Book> getAllBooks() {
     return service.findAllBooks();
+  }
+
+  @Query
+  @Description("Search for books, authors or publishers")
+  public List<SearchResult> search(String query) {
+    return service.search(query);
+  }
+
+  public List<Book> books(@Source Author author) {
+    return service.getBooksByAuthor(author);
+  }
+
+  @Query
+  public Optional<Book> bookByTitle(Context context, @Name("title") String bookTitle) {
+    System.out.println(context);
+    return service.findBookByTitle(bookTitle);
   }
 }
