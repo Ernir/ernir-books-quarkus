@@ -33,7 +33,7 @@ public final class BookService {
         record.numberOfPages(),
         record.yearPublished(),
         record.originalPublicationYear(),
-        Optional.of(record.myRating()),
+        Optional.of(record.myRating()).filter(rating -> rating != 0),
         record.dateRead(),
         record.dateAdded());
   }
