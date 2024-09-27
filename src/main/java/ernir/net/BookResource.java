@@ -34,8 +34,7 @@ public class BookResource {
   }
 
   @Query
-  public Optional<Book> bookByTitle(Context context, @Name("title") String bookTitle) {
-    System.out.println(context);
+  public Optional<Book> bookByTitle(Context context, @Name("titleFull") String bookTitle) {
     return service.findBookByTitle(bookTitle);
   }
 }

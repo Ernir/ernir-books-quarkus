@@ -16,11 +16,11 @@ import org.apache.commons.csv.CSVRecord;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
-public class BookData {
+public class BookCsvParser {
 
   private final List<BookRecord> books;
 
-  BookData(@ConfigProperty(name = "net.ernir.book.csv-location") String csvLocation) {
+  BookCsvParser(@ConfigProperty(name = "net.ernir.book.csv-location") String csvLocation) {
     List<CSVRecord> records;
     try (BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(csvLocation)));
@@ -32,7 +32,7 @@ public class BookData {
     } catch (IOException ioException) {
       records = List.of();
     }
-    books = records.stream().map(BookData::toBookRecord).toList();
+    books = records.stream().map(BookCsvParser::toBookRecord).toList();
     System.out.println("Loaded " + books.size() + " books from CSV file");
   }
 

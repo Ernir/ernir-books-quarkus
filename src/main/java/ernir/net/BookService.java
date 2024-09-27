@@ -1,18 +1,21 @@
 package ernir.net;
 
+import static java.util.stream.Collectors.*;
+
 import jakarta.enterprise.context.ApplicationScoped;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @ApplicationScoped
 public final class BookService {
-  private final List<Book> books;
-  private final BookData bookData;
+  private final List<Book> allBooks;
 
-  public BookService(BookData bookData) {
-    this.bookData = bookData;
-    this.books = bookData.getBooks().stream().map(BookService::from).toList();
+  public BookService(BookCsvParser bookCsvParser) {
+    this.allBooks = bookCsvParser.getBooks().stream().map(BookService::from).toList();
   }
 
   private static Book from(BookRecord record) {
@@ -20,8 +23,7 @@ public final class BookService {
         Integer.parseInt(record.id()),
         record.title(),
         from(record.author(), record.authorLastFirst()),
-        // TODO figure out additional author parsing
-        List.of(),
+        record.additionalAuthors().stream().filter(isNotBlank()).map(BookService::from).toList(),
         record.isbn(),
         record.isbn13(),
         record.averageRating(),
@@ -36,26 +38,56 @@ public final class BookService {
         record.dateAdded());
   }
 
+  private static Author from(String fullName) {
+    List<String> nameComponents = Arrays.stream(fullName.split(" ")).filter(isNotBlank()).toList();
+    String lastName = nameComponents.getLast();
+    String firstName = String.join(" ", nameComponents.subList(0, nameComponents.size() - 1));
+    return new Author(firstName + " " + lastName, firstName, lastName);
+  }
+
   private static Author from(String authorName, String authorLastFirst) {
     List<String> names = Arrays.stream(authorLastFirst.split(",")).map(String::strip).toList();
-    return new Author(authorName, names.get(1), names.get(0));
+    String cleanedAuthorName =
+        Arrays.stream(authorName.split(" ")).filter(isNotBlank()).collect(joining(" "));
+    return new Author(cleanedAuthorName, names.get(1), names.get(0));
   }
 
   public List<Book> findAllBooks() {
-    // TODO populate the list
-    bookData.getBooks();
-    return books;
+    return allBooks;
   }
 
   public Optional<Book> findBookByTitle(String title) {
-    return books.stream().filter(book -> book.title().equalsIgnoreCase(title)).findFirst();
+    return allBooks.stream().filter(book -> book.titleFull().equalsIgnoreCase(title)).findFirst();
   }
 
   public List<SearchResult> search(String query) {
-    return List.of();
+    String lowerCaseQuery = query.toLowerCase(Locale.ROOT);
+    ArrayList<SearchResult> results = new ArrayList<>();
+    results.addAll(
+        allBooks.stream()
+            .filter(book -> book.titleFull().toLowerCase().contains(lowerCaseQuery))
+            .toList());
+    results.addAll(
+        allBooks.stream()
+            .map(Book::author)
+            .filter(author -> author.fullName().toLowerCase().contains(lowerCaseQuery))
+            .distinct()
+            .toList());
+    results.addAll(
+        allBooks.stream()
+            .map(Book::publisher)
+            .flatMap(Optional::stream)
+            .filter(publisher -> publisher.name().toLowerCase().contains(lowerCaseQuery))
+            .distinct()
+            .toList());
+    return results;
   }
 
   public List<Book> getBooksByAuthor(Author author) {
-    return List.of();
+    return allBooks.stream().filter(book -> book.author().equals(author)).toList();
+  }
+
+  private static Predicate<String> isNotBlank() {
+    return s -> !s.isBlank();
   }
 }
