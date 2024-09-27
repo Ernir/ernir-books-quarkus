@@ -1,4 +1,4 @@
-package ernir.net;
+package ernir.net.books.data;
 
 import java.time.LocalDate;
 import java.util.List;

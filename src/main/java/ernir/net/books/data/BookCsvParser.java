@@ -1,6 +1,6 @@
-package ernir.net;
+package ernir.net.books.data;
 
-import static ernir.net.BookDataColumns.*;
+import static ernir.net.books.data.BookDataColumns.*;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import java.io.BufferedReader;

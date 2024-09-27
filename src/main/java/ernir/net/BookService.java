@@ -2,6 +2,12 @@ package ernir.net;
 
 import static java.util.stream.Collectors.*;
 
+import ernir.net.books.data.BookCsvParser;
+import ernir.net.books.data.BookRecord;
+import ernir.net.books.models.Author;
+import ernir.net.books.models.Book;
+import ernir.net.books.models.Publisher;
+import ernir.net.books.models.SearchResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.Arrays;

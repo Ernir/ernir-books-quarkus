@@ -1,4 +1,4 @@
-package ernir.net;
+package ernir.net.books.models;
 
 import io.smallrye.graphql.api.Union;
 

@@ -1,4 +1,4 @@
-package ernir.net;
+package ernir.net.books.data;
 
 public enum BookDataColumns {
   ID("Book Id"),

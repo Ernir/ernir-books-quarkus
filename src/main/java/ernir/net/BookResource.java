@@ -1,5 +1,8 @@
 package ernir.net;
 
+import ernir.net.books.models.Author;
+import ernir.net.books.models.Book;
+import ernir.net.books.models.SearchResult;
 import io.smallrye.graphql.api.Context;
 import java.util.List;
 import java.util.Optional;
