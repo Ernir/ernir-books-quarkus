@@ -35,10 +35,11 @@ public final class BookService {
     return new Book(
         Integer.parseInt(record.id()),
         record.title(),
-        fromAuthorName(record.author(), record.authorLastFirst()),
+        shortTitle(record.title()),
+        authorFromName(record.author(), record.authorLastFirst()),
         record.additionalAuthors().stream()
             .filter(isNotBlank())
-            .map(BookService::fromAuthorName)
+            .map(BookService::authorFromName)
             .toList(),
         fromBookTitle(record.title()),
         record.isbn(),
@@ -55,18 +56,27 @@ public final class BookService {
         record.dateAdded());
   }
 
-  private static Author fromAuthorName(String fullName) {
+  private static Author authorFromName(String fullName) {
     List<String> nameComponents = Arrays.stream(fullName.split(" ")).filter(isNotBlank()).toList();
     String lastName = nameComponents.getLast();
     String firstName = String.join(" ", nameComponents.subList(0, nameComponents.size() - 1));
     return new Author(firstName + " " + lastName, firstName, lastName);
   }
 
-  private static Author fromAuthorName(String authorName, String authorLastFirst) {
+  private static Author authorFromName(String authorName, String authorLastFirst) {
     List<String> names = Arrays.stream(authorLastFirst.split(",")).map(String::strip).toList();
     String cleanedAuthorName =
         Arrays.stream(authorName.split(" ")).filter(isNotBlank()).collect(joining(" "));
     return new Author(cleanedAuthorName, names.get(1), names.get(0));
+  }
+
+  private static String shortTitle(String fullBookTitle) {
+    Matcher matcher = TITLE_PATTERN.matcher(fullBookTitle);
+    if (matcher.matches()) {
+      return matcher.group("shortTitle");
+    } else {
+      return fullBookTitle;
+    }
   }
 
   private static Optional<SeriesMembership> fromBookTitle(String fullBookTitle) {

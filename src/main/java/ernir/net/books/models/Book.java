@@ -7,6 +7,7 @@ import java.util.Optional;
 public record Book(
     long id,
     String titleFull,
+    String titleShort,
     Author author,
     List<Author> additionalAuthors,
     Optional<SeriesMembership> partOfSeries,
