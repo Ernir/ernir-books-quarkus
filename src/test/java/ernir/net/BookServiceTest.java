@@ -22,8 +22,8 @@ class BookServiceTest {
             new BookRecord(
                 "214240402",
                 "Deathseed (The Weirkey Chronicles Book 8)",
-                "Author1",
-                "Lin,Sarah",
+                "Sarah Lin",
+                "Lin, Sarah",
                 List.of(),
                 Optional.empty(),
                 Optional.empty(),
@@ -43,6 +43,31 @@ class BookServiceTest {
                 "",
                 "",
                 1,
+                ""),
+            new BookRecord(
+                "201127814",
+                "The Engineer (The Last Horizon, #2)",
+                "Will Wight",
+                "Wight, Will",
+                List.of(),
+                Optional.empty(),
+                Optional.empty(),
+                4,
+                4.52,
+                "Hidden Gnome Publishing",
+                "Kindle edition",
+                Optional.of(465),
+                Optional.of(2023),
+                Optional.of(2023),
+                Optional.of(LocalDate.parse("2024-04-23")),
+                Optional.of(LocalDate.parse("2024-04-18")),
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                1,
                 ""));
     when(parser.getBooks()).thenReturn(mockRecords);
 
@@ -50,7 +75,7 @@ class BookServiceTest {
 
     var books = bookService.findAllBooks();
     // TODO make real assertions
-    assertThat(books).hasSize(1);
+    assertThat(books).hasSize(2);
   }
 
   @Test

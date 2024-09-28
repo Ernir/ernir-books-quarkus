@@ -80,17 +80,18 @@ public final class BookService {
   private static SeriesMembership parseSeriesDescription(String seriesDescription) {
     String[] commaSeparated = seriesDescription.split(",");
     String seriesName;
-    // TODO Extract this
-    int position = 0;
-    int subPosition = 0;
+    String seriesPosition = null;
     if (commaSeparated.length == 2) {
       seriesName = commaSeparated[0].trim();
+      seriesPosition = commaSeparated[1].trim().replaceAll("#", "");
     } else if (seriesDescription.contains("Book")) {
-      seriesName = seriesDescription.split("Book")[0].trim();
+      String[] seriesNameComponents = seriesDescription.split("Book");
+      seriesName = seriesNameComponents[0].trim();
+      seriesPosition = seriesNameComponents[1].trim();
     } else {
       seriesName = seriesDescription;
     }
-    return new SeriesMembership(new Series(seriesName), position, subPosition);
+    return new SeriesMembership(new Series(seriesName), Optional.ofNullable(seriesPosition));
   }
 
   public List<Book> findAllBooks() {
