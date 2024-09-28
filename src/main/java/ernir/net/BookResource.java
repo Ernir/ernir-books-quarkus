@@ -3,6 +3,8 @@ package ernir.net;
 import ernir.net.books.models.Author;
 import ernir.net.books.models.Book;
 import ernir.net.books.models.SearchResult;
+import ernir.net.books.models.Series;
+import ernir.net.books.models.SeriesMembership;
 import io.smallrye.graphql.api.Context;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +36,15 @@ public class BookResource {
 
   public List<Book> books(@Source Author author) {
     return service.getBooksByAuthor(author);
+  }
+
+  @Query
+  public Optional<Series> seriesByName(String name) {
+    return service.getSeriesByName(name);
+  }
+
+  public List<SeriesMembership> booksInSeries(@Source Series series) {
+    return service.findBooksOfSeries(series);
   }
 
   @Query

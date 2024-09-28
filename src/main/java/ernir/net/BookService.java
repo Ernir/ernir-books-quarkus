@@ -99,13 +99,40 @@ public final class BookService {
       seriesName = seriesNameComponents[0].trim();
       seriesPosition = seriesNameComponents[1].trim();
     } else {
-      seriesName = seriesDescription;
+      ArrayList<String> spaceSeparated =
+          Arrays.stream(seriesDescription.trim().split(" "))
+              .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+      if (spaceSeparated.size() > 1 && spaceSeparated.getLast().contains("#")) {
+        String last = spaceSeparated.removeLast();
+        seriesName = String.join(" ", spaceSeparated);
+        seriesPosition = last.replaceAll("#", "").trim();
+      } else {
+        seriesName = seriesDescription;
+      }
     }
     return new SeriesMembership(new Series(seriesName), Optional.ofNullable(seriesPosition));
   }
 
   public List<Book> findAllBooks() {
     return allBooks;
+  }
+
+  public Optional<Series> getSeriesByName(String name) {
+    return allBooks.stream()
+        .map(Book::partOfSeries)
+        .flatMap(Optional::stream)
+        .map(SeriesMembership::series)
+        .filter(series -> series.name().equalsIgnoreCase(name))
+        .findFirst();
+  }
+
+  public List<SeriesMembership> findBooksOfSeries(Series series) {
+    return allBooks.stream()
+        .map(Book::partOfSeries)
+        .flatMap(Optional::stream)
+        .filter(
+            seriesMembership -> seriesMembership.series().name().equalsIgnoreCase(series.name()))
+        .toList();
   }
 
   public Optional<Book> findBookByTitle(String title) {
