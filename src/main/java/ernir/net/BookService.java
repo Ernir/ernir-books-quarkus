@@ -130,8 +130,7 @@ public final class BookService {
     return allBooks.stream()
         .map(Book::partOfSeries)
         .flatMap(Optional::stream)
-        .filter(
-            seriesMembership -> seriesMembership.series().name().equalsIgnoreCase(series.name()))
+        .filter(sm -> sm.series().name().equalsIgnoreCase(series.name()))
         .toList();
   }
 

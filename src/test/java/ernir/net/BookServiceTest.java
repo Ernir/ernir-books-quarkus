@@ -9,6 +9,9 @@ import ernir.net.books.data.BookCsvParser;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import ernir.net.books.models.Series;
+import ernir.net.books.models.SeriesMembership;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -149,7 +152,7 @@ class BookServiceTest {
   @Test
   void findAllBooks() {
     BookCsvParser parser = mock();
-    List<BookCsvLine> records =
+    List<BookCsvLine> csvs =
         List.of(
             DEATHSEED_CSV,
             WAKESPIRE_CSV,
@@ -157,7 +160,7 @@ class BookServiceTest {
             UNFETTERED_CSV,
             SEVEN_OF_INFINITIES_CSV,
             BRAVE_NEW_WORLD_CSV);
-    when(parser.getBooks()).thenReturn(records);
+    when(parser.getBooks()).thenReturn(csvs);
 
     BookService bookService = new BookService(parser);
 
@@ -167,14 +170,73 @@ class BookServiceTest {
   }
 
   @Test
-  @Disabled
-  void findBookByTitle() {}
+  void findAllBooks_none_available() {
+    BookCsvParser parser = mock();
+
+    when(parser.getBooks()).thenReturn(List.of());
+
+    BookService bookService = new BookService(parser);
+
+    var books = bookService.findAllBooks();
+    assertThat(books).isEmpty();
+  }
+
+  @Test
+  void getSeriesByName() {
+    BookCsvParser parser = mock();
+
+    when(parser.getBooks()).thenReturn(List.of(DEATHSEED_CSV, WAKESPIRE_CSV));
+
+    BookService bookService = new BookService(parser);
+
+    var series = bookService.getSeriesByName("The Weirkey Chronicles");
+
+    assertThat(series).hasValue(new Series("The Weirkey Chronicles"));
+  }
+
+  @Test
+  void getSeriesByName_not_found() {
+    BookCsvParser parser = mock();
+
+    when(parser.getBooks()).thenReturn(List.of(DEATHSEED_CSV, WAKESPIRE_CSV));
+
+    BookService bookService = new BookService(parser);
+
+    var series = bookService.getSeriesByName("The Weird Chronicles");
+
+    assertThat(series).isEmpty();
+  }
+
+  @Test
+  void findBooksOfSeries() {
+    BookCsvParser parser = mock();
+
+    when(parser.getBooks()).thenReturn(List.of(DEATHSEED_CSV, WAKESPIRE_CSV));
+
+    BookService bookService = new BookService(parser);
+
+    Series theWeirkeyChronicles = new Series("The Weirkey Chronicles");
+    List<SeriesMembership> series = bookService.findBooksOfSeries(theWeirkeyChronicles);
+
+    assertThat(series)
+        .containsExactly(
+            new SeriesMembership(theWeirkeyChronicles, Optional.of("8")),
+            new SeriesMembership(theWeirkeyChronicles, Optional.of("7")));
+  }
 
   @Test
   @Disabled
-  void search() {}
+  void findBookOfSeriesMembership() {}
 
   @Test
   @Disabled
-  void getBooksByAuthor() {}
+  void testFindBookByTitle() {}
+
+  @Test
+  @Disabled
+  void testSearch() {}
+
+  @Test
+  @Disabled
+  void testGetBooksByAuthor() {}
 }
