@@ -8,6 +8,8 @@ import ernir.net.books.models.Author;
 import ernir.net.books.models.Book;
 import ernir.net.books.models.Publisher;
 import ernir.net.books.models.SearchResult;
+import ernir.net.books.models.Series;
+import ernir.net.books.models.SeriesMembership;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,9 +17,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @ApplicationScoped
 public final class BookService {
+  private static final Pattern TITLE_PATTERN =
+      Pattern.compile("(?<shortTitle>.*)\\s\\((?<seriesDescription>[^(]*)\\)");
+
   private final List<Book> allBooks;
 
   public BookService(BookCsvParser bookCsvParser) {
@@ -28,8 +35,12 @@ public final class BookService {
     return new Book(
         Integer.parseInt(record.id()),
         record.title(),
-        from(record.author(), record.authorLastFirst()),
-        record.additionalAuthors().stream().filter(isNotBlank()).map(BookService::from).toList(),
+        fromAuthorName(record.author(), record.authorLastFirst()),
+        record.additionalAuthors().stream()
+            .filter(isNotBlank())
+            .map(BookService::fromAuthorName)
+            .toList(),
+        fromBookTitle(record.title()),
         record.isbn(),
         record.isbn13(),
         record.averageRating(),
@@ -44,18 +55,42 @@ public final class BookService {
         record.dateAdded());
   }
 
-  private static Author from(String fullName) {
+  private static Author fromAuthorName(String fullName) {
     List<String> nameComponents = Arrays.stream(fullName.split(" ")).filter(isNotBlank()).toList();
     String lastName = nameComponents.getLast();
     String firstName = String.join(" ", nameComponents.subList(0, nameComponents.size() - 1));
     return new Author(firstName + " " + lastName, firstName, lastName);
   }
 
-  private static Author from(String authorName, String authorLastFirst) {
+  private static Author fromAuthorName(String authorName, String authorLastFirst) {
     List<String> names = Arrays.stream(authorLastFirst.split(",")).map(String::strip).toList();
     String cleanedAuthorName =
         Arrays.stream(authorName.split(" ")).filter(isNotBlank()).collect(joining(" "));
     return new Author(cleanedAuthorName, names.get(1), names.get(0));
+  }
+
+  private static Optional<SeriesMembership> fromBookTitle(String fullBookTitle) {
+    Matcher matcher = TITLE_PATTERN.matcher(fullBookTitle);
+    return Optional.of(matcher)
+        .filter(Matcher::matches)
+        .map(m -> m.group("seriesDescription"))
+        .map(BookService::parseSeriesDescription);
+  }
+
+  private static SeriesMembership parseSeriesDescription(String seriesDescription) {
+    String[] commaSeparated = seriesDescription.split(",");
+    String seriesName;
+    // TODO Extract this
+    int position = 0;
+    int subPosition = 0;
+    if (commaSeparated.length == 2) {
+      seriesName = commaSeparated[0].trim();
+    } else if (seriesDescription.contains("Book")) {
+      seriesName = seriesDescription.split("Book")[0].trim();
+    } else {
+      seriesName = seriesDescription;
+    }
+    return new SeriesMembership(new Series(seriesName), position, subPosition);
   }
 
   public List<Book> findAllBooks() {

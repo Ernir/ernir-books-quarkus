@@ -9,6 +9,7 @@ public record Book(
     String titleFull,
     Author author,
     List<Author> additionalAuthors,
+    Optional<SeriesMembership> partOfSeries,
     Optional<String> isbn,
     Optional<String> isbn13,
     double averageRating,
