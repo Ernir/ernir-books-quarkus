@@ -102,7 +102,7 @@ public final class BookService {
       ArrayList<String> spaceSeparated =
           Arrays.stream(seriesDescription.trim().split(" "))
               .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-      if (spaceSeparated.size() > 1 && spaceSeparated.getLast().contains("#")) {
+      if (spaceSeparated.getLast().contains("#")) {
         String last = spaceSeparated.removeLast();
         seriesName = String.join(" ", spaceSeparated);
         seriesPosition = last.replaceAll("#", "").trim();
