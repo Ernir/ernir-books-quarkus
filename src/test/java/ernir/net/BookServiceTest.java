@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import ernir.net.books.data.BookCsvLine;
 import ernir.net.books.data.BookCsvParser;
-import ernir.net.books.data.BookRecord;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +16,10 @@ class BookServiceTest {
 
   @Test
   void findAllBooks() {
-    BookCsvParser parser = mock(BookCsvParser.class);
-    List<BookRecord> mockRecords =
+    BookCsvParser parser = mock();
+    List<BookCsvLine> mockRecords =
         List.of(
-            new BookRecord(
+            new BookCsvLine(
                 "214240402",
                 "Deathseed (The Weirkey Chronicles Book 8)",
                 "Sarah Lin",
@@ -35,16 +35,8 @@ class BookServiceTest {
                 Optional.of(2024),
                 Optional.empty(),
                 Optional.of(LocalDate.parse("2024-07-28")),
-                Optional.of(LocalDate.parse("2024-07-21")),
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                1,
-                ""),
-            new BookRecord(
+                Optional.of(LocalDate.parse("2024-07-21"))),
+            new BookCsvLine(
                 "201127814",
                 "The Engineer (The Last Horizon, #2)",
                 "Will Wight",
@@ -60,15 +52,7 @@ class BookServiceTest {
                 Optional.of(2023),
                 Optional.of(2023),
                 Optional.of(LocalDate.parse("2024-04-23")),
-                Optional.of(LocalDate.parse("2024-04-18")),
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                1,
-                ""));
+                Optional.of(LocalDate.parse("2024-04-18"))));
     when(parser.getBooks()).thenReturn(mockRecords);
 
     BookService bookService = new BookService(parser);

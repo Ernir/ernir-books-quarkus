@@ -2,8 +2,8 @@ package ernir.net;
 
 import static java.util.stream.Collectors.*;
 
+import ernir.net.books.data.BookCsvLine;
 import ernir.net.books.data.BookCsvParser;
-import ernir.net.books.data.BookRecord;
 import ernir.net.books.models.Author;
 import ernir.net.books.models.Book;
 import ernir.net.books.models.Publisher;
@@ -31,29 +31,29 @@ public final class BookService {
     this.allBooks = bookCsvParser.getBooks().stream().map(BookService::from).toList();
   }
 
-  private static Book from(BookRecord record) {
+  private static Book from(BookCsvLine csvLine) {
     return new Book(
-        Integer.parseInt(record.id()),
-        record.title(),
-        shortTitle(record.title()),
-        authorFromName(record.author(), record.authorLastFirst()),
-        record.additionalAuthors().stream()
+        Integer.parseInt(csvLine.id()),
+        csvLine.title(),
+        shortTitle(csvLine.title()),
+        authorFromName(csvLine.author(), csvLine.authorLastFirst()),
+        csvLine.additionalAuthors().stream()
             .filter(isNotBlank())
             .map(BookService::authorFromName)
             .toList(),
-        fromBookTitle(record.title()),
-        record.isbn(),
-        record.isbn13(),
-        record.averageRating(),
-        Optional.of(new Publisher(record.publisher()))
+        fromBookTitle(csvLine.title()),
+        csvLine.isbn(),
+        csvLine.isbn13(),
+        csvLine.averageRating(),
+        Optional.of(new Publisher(csvLine.publisher()))
             .filter(publisher -> !publisher.name().isBlank()),
-        record.binding(),
-        record.numberOfPages(),
-        record.yearPublished(),
-        record.originalPublicationYear(),
-        Optional.of(record.myRating()).filter(rating -> rating != 0),
-        record.dateRead(),
-        record.dateAdded());
+        csvLine.binding(),
+        csvLine.numberOfPages(),
+        csvLine.yearPublished(),
+        csvLine.originalPublicationYear(),
+        Optional.of(csvLine.myRating()).filter(rating -> rating != 0),
+        csvLine.dateRead(),
+        csvLine.dateAdded());
   }
 
   private static Author authorFromName(String fullName) {

@@ -16,15 +16,7 @@ public enum BookDataColumns {
   YEAR_PUBLISHED("Year Published"),
   ORIGINAL_PUBLICATION("Original Publication Year"),
   DATE_READ("Date Read"),
-  DATE_ADDED("Date Added"),
-  BOOKSHELVES("Bookshelves"),
-  BOOKSHELVES_WITH_POSITIONS("Bookshelves with positions"),
-  EXCLUSIVE_SHELF("Exclusive Shelf"),
-  MY_REVIEW("My Review"),
-  SPOILER("Spoiler"),
-  PRIVATE_NOTES("Private Notes"),
-  READ_COUNT("Read Count"),
-  OWNED("Owned Copies");
+  DATE_ADDED("Date Added");
 
   private final String columnName;
 

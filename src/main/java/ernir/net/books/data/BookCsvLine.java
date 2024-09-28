@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public record BookRecord(
+public record BookCsvLine(
     String id,
     String title,
     String author,
@@ -20,12 +20,4 @@ public record BookRecord(
     Optional<Integer> yearPublished,
     Optional<Integer> originalPublicationYear,
     Optional<LocalDate> dateRead,
-    Optional<LocalDate> dateAdded,
-    String bookshelves,
-    String bookshelvesWithPositions,
-    String exclusiveShelf,
-    String myReview,
-    String spoiler,
-    String privateNotes,
-    int readCount,
-    String owned) {}
+    Optional<LocalDate> dateAdded) {}
