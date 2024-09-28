@@ -43,8 +43,12 @@ public class BookResource {
     return service.getSeriesByName(name);
   }
 
-  public List<SeriesMembership> booksInSeries(@Source Series series) {
+  public List<SeriesMembership> books(@Source Series series) {
     return service.findBooksOfSeries(series);
+  }
+
+  public Book book(@Source SeriesMembership membership) {
+    return service.findBookOfSeriesMembership(membership);
   }
 
   @Query

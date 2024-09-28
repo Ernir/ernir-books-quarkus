@@ -135,6 +135,18 @@ public final class BookService {
         .toList();
   }
 
+  public Book findBookOfSeriesMembership(SeriesMembership membership) {
+    return allBooks.stream()
+        .filter(
+            book ->
+                book.partOfSeries().isPresent()
+                    && book.partOfSeries().orElseThrow().equals(membership))
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException("Book not found for series membership " + membership));
+  }
+
   public Optional<Book> findBookByTitle(String title) {
     return allBooks.stream().filter(book -> book.titleFull().equalsIgnoreCase(title)).findFirst();
   }
