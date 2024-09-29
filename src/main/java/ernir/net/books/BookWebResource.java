@@ -7,7 +7,6 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-
 import java.util.List;
 
 @Path("books")
@@ -27,6 +26,6 @@ public class BookWebResource {
   @Path("")
   @Produces(MediaType.TEXT_HTML)
   public TemplateInstance get() {
-    return Templates.books(bookService.findAllBooks());
+    return Templates.books(bookService.findReadBooks());
   }
 }

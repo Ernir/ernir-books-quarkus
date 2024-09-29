@@ -22,4 +22,16 @@ public record Book(
     Optional<Integer> myRating,
     Optional<LocalDate> myDateRead,
     Optional<LocalDate> myDateAdded)
-    implements SearchResult {}
+    implements SearchResult {
+  public String authorFullName() {
+    return author.fullName();
+  }
+
+  public Optional<String> seriesName() {
+    return partOfSeries().map(SeriesMembership::series).map(Series::name);
+  }
+
+  public Optional<String> seriesPosition() {
+    return partOfSeries().flatMap(SeriesMembership::position);
+  }
+}

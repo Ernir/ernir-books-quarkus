@@ -1,5 +1,6 @@
 package ernir.net.books;
 
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
 import ernir.net.books.data.BookCsvLine;
@@ -13,6 +14,7 @@ import ernir.net.books.models.SeriesMembership;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -115,6 +117,13 @@ final class BookService {
 
   List<Book> findAllBooks() {
     return allBooks;
+  }
+
+  List<Book> findReadBooks() {
+    return allBooks.stream()
+        .filter(book -> book.myDateRead().isPresent())
+        .sorted(comparing(book -> book.myDateRead().orElseThrow(), Comparator.reverseOrder()))
+        .toList();
   }
 
   Optional<Series> getSeriesByName(String name) {

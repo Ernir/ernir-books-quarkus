@@ -2,13 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ALL THE BOOKS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>Books from GoodReads</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 </head>
 <body>
-{#for book in books}
-    <p>
-        {book.titleShort}
-    </p>
-{/for}
+<main class="container">
+    <nav>
+        <ul>
+            <li><strong>Books from GoodReads</strong></li>
+        </ul>
+        <ul>
+            <li><a href="/books">Books</a></li>
+        </ul>
+    </nav>
+    <table>
+        <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Series</th>
+            <th scope="col">My rating</th>
+            <th scope="col">Global rating</th>
+            <th scope="col">Date read</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#for book in books}
+            <tr>
+                <th scope="row">
+                    {book.titleShort}
+                </th>
+                <td>
+                    {book.authorFullName}
+                </td>
+                <td>
+                    {book.seriesName} {#if book.seriesPosition.isPresent()}(#{book.seriesPosition}){/if}
+                </td>
+                <td>
+                    {book.myRating}
+                </td>
+                <td>
+                    {book.averageRating}
+                </td>
+                <td>
+                    {book.myDateRead}
+                </td>
+            </tr>
+        {/for}
+        </tbody>
+    </table>
+</main>
 </body>
 </html>
