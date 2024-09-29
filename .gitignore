@@ -43,3 +43,6 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 # TLS Certificates
 .certs/
+
+# Libreoffice lock file
+/src/main/resources/.~lock.goodreads_library_export.csv#
