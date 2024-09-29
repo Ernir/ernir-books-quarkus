@@ -5,6 +5,7 @@ import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
@@ -20,6 +21,8 @@ public class BookWebResource {
   @CheckedTemplate
   public static class Templates {
     public static native TemplateInstance books(List<Book> books);
+
+    public static native TemplateInstance book(Book book);
   }
 
   @GET
@@ -27,5 +30,12 @@ public class BookWebResource {
   @Produces(MediaType.TEXT_HTML)
   public TemplateInstance get() {
     return Templates.books(bookService.findReadBooks());
+  }
+
+  @GET
+  @Path("{id}")
+  @Produces(MediaType.TEXT_HTML)
+  public TemplateInstance get(@PathParam("id") int id) {
+    return Templates.book(bookService.getBookById(id));
   }
 }

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>Books from GoodReads - {book.titleShort} by {book.authorFullName}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+</head>
+<body>
+<main class="container">
+    <nav>
+        <ul>
+            <li><strong>Books from GoodReads</strong></li>
+        </ul>
+        <ul>
+            <li><a href="/books">Books</a></li>
+        </ul>
+    </nav>
+    <table>
+        <tbody>
+        <tr>
+            <th scope="row">
+                <strong>Title</strong>
+            </th>
+            <td>{book.titleShort}</td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <strong>Author</strong>
+            </th>
+            <td>
+                {book.authorFullName}
+            </td>
+        </tr>
+        {#if ! book.additionalAuthors.isEmpty()}
+            <tr>
+                <th scope="row">
+                    <strong>Additional authors</strong>
+                </th>
+                <td>
+                    {#each book.additionalAuthors}
+                        {it.fullName}{#if it_hasNext},{/if}
+                    {/each}
+                </td>
+            </tr>
+        {/if}
+        <tr>
+            <th scope="row">
+                <strong>Series</strong>
+            </th>
+            <td>
+                {#if book.seriesName.isPresent()}
+                    {book.seriesName}
+                {#else}
+                    Not part of series
+                {/if}
+            </td>
+        </tr>
+        {#if book.seriesPosition.isPresent()}
+            <tr>
+                <th scope="row">
+                    <strong>Position in series</strong>
+                </th>
+                <td>
+                    {book.seriesPosition}
+                </td>
+            </tr>
+        {/if}
+        <tr>
+            <th scope="row">
+                <strong>My rating</strong>
+            </th>
+            <td>
+                {#if book.myRating.isPresent()}
+                    {book.myRating}
+                {#else}
+                    Unrated
+                {/if}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <strong>Average rating</strong>
+            </th>
+            <td>
+                {book.averageRating}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <strong>Date read</strong>
+            </th>
+            <td>
+                {book.myDateRead}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

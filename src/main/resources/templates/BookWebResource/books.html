@@ -32,7 +32,7 @@
         {#for book in books}
             <tr>
                 <th scope="row">
-                    {book.titleShort}
+                    <a href="/books/{book.id}">{book.titleShort}</a>
                 </th>
                 <td>
                     {book.authorFullName}

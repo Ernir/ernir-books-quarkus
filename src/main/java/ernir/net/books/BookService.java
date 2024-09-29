@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -124,6 +125,13 @@ final class BookService {
         .filter(book -> book.myDateRead().isPresent())
         .sorted(comparing(book -> book.myDateRead().orElseThrow(), Comparator.reverseOrder()))
         .toList();
+  }
+
+  Book getBookById(long id) {
+    return allBooks.stream()
+        .filter(book -> book.id() == id)
+        .findFirst()
+        .orElseThrow(() -> new NoSuchElementException("No book with ID " + id + " found"));
   }
 
   Optional<Series> getSeriesByName(String name) {
