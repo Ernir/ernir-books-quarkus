@@ -1,4 +1,4 @@
-package ernir.net;
+package ernir.net.books;
 
 import static java.util.stream.Collectors.*;
 
@@ -21,13 +21,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @ApplicationScoped
-public final class BookService {
+final class BookService {
   private static final Pattern TITLE_PATTERN =
       Pattern.compile("(?<shortTitle>.*)\\s\\((?<seriesDescription>[^(]*)\\)");
 
   private final List<Book> allBooks;
 
-  public BookService(BookCsvParser bookCsvParser) {
+  BookService(BookCsvParser bookCsvParser) {
     this.allBooks = bookCsvParser.getBooks().stream().map(BookService::from).toList();
   }
 
@@ -113,11 +113,11 @@ public final class BookService {
     return new SeriesMembership(new Series(seriesName), Optional.ofNullable(seriesPosition));
   }
 
-  public List<Book> findAllBooks() {
+  List<Book> findAllBooks() {
     return allBooks;
   }
 
-  public Optional<Series> getSeriesByName(String name) {
+  Optional<Series> getSeriesByName(String name) {
     return allBooks.stream()
         .map(Book::partOfSeries)
         .flatMap(Optional::stream)
@@ -126,7 +126,7 @@ public final class BookService {
         .findFirst();
   }
 
-  public List<SeriesMembership> findBooksOfSeries(Series series) {
+  List<SeriesMembership> findBooksOfSeries(Series series) {
     return allBooks.stream()
         .map(Book::partOfSeries)
         .flatMap(Optional::stream)
@@ -134,7 +134,7 @@ public final class BookService {
         .toList();
   }
 
-  public Book findBookOfSeriesMembership(SeriesMembership membership) {
+  Book findBookOfSeriesMembership(SeriesMembership membership) {
     return allBooks.stream()
         .filter(
             book ->
@@ -146,11 +146,11 @@ public final class BookService {
                 new IllegalArgumentException("Book not found for series membership " + membership));
   }
 
-  public Optional<Book> findBookByTitle(String title) {
+  Optional<Book> findBookByTitle(String title) {
     return allBooks.stream().filter(book -> book.titleFull().equalsIgnoreCase(title)).findFirst();
   }
 
-  public List<SearchResult> search(String query) {
+  List<SearchResult> search(String query) {
     String lowerCaseQuery = query.toLowerCase(Locale.ROOT);
     ArrayList<SearchResult> results = new ArrayList<>();
     results.addAll(
@@ -173,7 +173,7 @@ public final class BookService {
     return results;
   }
 
-  public List<Book> getBooksByAuthor(Author author) {
+  List<Book> getBooksByAuthor(Author author) {
     return allBooks.stream().filter(book -> book.author().equals(author)).toList();
   }
 

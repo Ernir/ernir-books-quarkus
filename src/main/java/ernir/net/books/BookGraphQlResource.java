@@ -1,4 +1,4 @@
-package ernir.net;
+package ernir.net.books;
 
 import ernir.net.books.models.Author;
 import ernir.net.books.models.Book;
@@ -15,10 +15,10 @@ import org.eclipse.microprofile.graphql.Query;
 import org.eclipse.microprofile.graphql.Source;
 
 @GraphQLApi
-public class BookResource {
+public final class BookGraphQlResource {
   private final BookService service;
 
-  public BookResource(BookService service) {
+  BookGraphQlResource(BookService service) {
     this.service = service;
   }
 

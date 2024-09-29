@@ -1,4 +1,4 @@
-package ernir.net;
+package ernir.net.books;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
