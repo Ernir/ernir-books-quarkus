@@ -1,10 +1,10 @@
 {#include base}
-    {#title}All read books{/title}
+    {#title}{author.name}{/title}
+    <p>Books by {author.name}</p>
     <table>
         <thead>
         <tr>
             <th scope="col">Title</th>
-            <th scope="col">Author</th>
             <th scope="col">Series</th>
             <th scope="col">My rating</th>
             <th scope="col">Global rating</th>
@@ -12,14 +12,11 @@
         </tr>
         </thead>
         <tbody>
-        {#for book in books}
+        {#for book in author.books}
             <tr>
                 <th scope="row">
                     <a href="/books/{book.id}">{book.titleShort}</a>
                 </th>
-                <td>
-                    <a href="/books/authors/{book.author.slug}">{book.authorFullName}</a>
-                </td>
                 <td>
                     {book.seriesName} {#if book.seriesPosition.isPresent()}(#{book.seriesPosition}){/if}
                 </td>

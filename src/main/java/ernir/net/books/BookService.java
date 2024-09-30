@@ -190,6 +190,15 @@ final class BookService {
     return results;
   }
 
+  Author getAuthorBySlug(String slug) {
+    return allBooks.stream()
+        .map(Book::author)
+        .filter(author -> author.slug().equals(slug))
+        .findFirst()
+        .orElseThrow(
+            () -> new NoSuchElementException("No book author with Slug " + slug + " found"));
+  }
+
   List<Book> getBooksByAuthor(Author author) {
     return allBooks.stream().filter(book -> book.author().equals(author)).toList();
   }

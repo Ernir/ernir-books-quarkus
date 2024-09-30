@@ -23,19 +23,32 @@ public class BookWebResource {
     public static native TemplateInstance books(List<Book> books);
 
     public static native TemplateInstance book(Book book);
+
+    public static native TemplateInstance author(AuthorWithBooks author);
   }
+
+  public record AuthorWithBooks(String name, List<Book> books) {}
 
   @GET
   @Path("")
   @Produces(MediaType.TEXT_HTML)
-  public TemplateInstance get() {
+  public TemplateInstance findBooks() {
     return Templates.books(bookService.findReadBooks());
   }
 
   @GET
   @Path("{id}")
   @Produces(MediaType.TEXT_HTML)
-  public TemplateInstance get(@PathParam("id") int id) {
+  public TemplateInstance getBook(@PathParam("id") int id) {
     return Templates.book(bookService.getBookById(id));
+  }
+
+  @GET
+  @Path("authors/{slug}")
+  @Produces(MediaType.TEXT_HTML)
+  public TemplateInstance getAuthor(@PathParam("slug") String slug) {
+    var author = bookService.getAuthorBySlug(slug);
+    List<Book> books = bookService.getBooksByAuthor(author);
+    return Templates.author(new AuthorWithBooks(author.fullName(), books));
   }
 }
