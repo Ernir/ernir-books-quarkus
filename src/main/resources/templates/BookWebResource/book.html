@@ -1,22 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
-    <title>Books from GoodReads - {book.titleShort} by {book.authorFullName}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-</head>
-<body>
-<main class="container">
-    <nav>
-        <ul>
-            <li><strong>Books from GoodReads</strong></li>
-        </ul>
-        <ul>
-            <li><a href="/books">Books</a></li>
-        </ul>
-    </nav>
+{#include base}
+    {#title}{book.titleShort} by {book.authorFullName}{/title}
     <table>
         <tbody>
         <tr>
@@ -97,6 +80,4 @@
         </tr>
         </tbody>
     </table>
-</main>
-</body>
-</html>
+{/include}
