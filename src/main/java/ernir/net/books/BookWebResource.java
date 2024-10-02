@@ -1,5 +1,7 @@
 package ernir.net.books;
 
+import ernir.net.books.BookService.AuthorWithBooks;
+import ernir.net.books.BookService.AuthorWithCounts;
 import ernir.net.books.models.Book;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
@@ -10,7 +12,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("books")
+@Path("")
 public class BookWebResource {
   private final BookService bookService;
 
@@ -24,10 +26,10 @@ public class BookWebResource {
 
     public static native TemplateInstance book(Book book);
 
+    public static native TemplateInstance authors(List<AuthorWithCounts> authors);
+
     public static native TemplateInstance author(AuthorWithBooks author);
   }
-
-  public record AuthorWithBooks(String name, List<Book> books) {}
 
   @GET
   @Path("")
@@ -44,11 +46,16 @@ public class BookWebResource {
   }
 
   @GET
+  @Path("authors/")
+  @Produces(MediaType.TEXT_HTML)
+  public TemplateInstance findAuthors() {
+    return Templates.authors(bookService.findAuthorsByBookCount());
+  }
+
+  @GET
   @Path("authors/{slug}")
   @Produces(MediaType.TEXT_HTML)
   public TemplateInstance getAuthor(@PathParam("slug") String slug) {
-    var author = bookService.getAuthorBySlug(slug);
-    List<Book> books = bookService.getBooksByAuthor(author);
-    return Templates.author(new AuthorWithBooks(author.fullName(), books));
+    return Templates.author(bookService.getAuthorWithBooks(slug));
   }
 }

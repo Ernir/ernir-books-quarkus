@@ -1,6 +1,8 @@
 package ernir.net.books;
 
 import static java.util.Comparator.comparing;
+import static java.util.Comparator.reverseOrder;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
 
 import ernir.net.books.data.BookCsvLine;
@@ -190,17 +192,35 @@ final class BookService {
     return results;
   }
 
-  Author getAuthorBySlug(String slug) {
-    return allBooks.stream()
-        .map(Book::author)
-        .filter(author -> author.slug().equals(slug))
-        .findFirst()
-        .orElseThrow(
-            () -> new NoSuchElementException("No book author with Slug " + slug + " found"));
+  public record AuthorWithBooks(String name, List<Book> books) {}
+
+  AuthorWithBooks getAuthorWithBooks(String slug) {
+    List<Book> books = allBooks.stream().filter(book -> book.author().slug().equals(slug)).toList();
+    String fullName =
+        books.stream()
+            .findFirst()
+            .map(Book::author)
+            .map(Author::fullName)
+            .orElseThrow(
+                () -> new NoSuchElementException("Author with slug " + slug + " not found"));
+    return new AuthorWithBooks(fullName, books);
   }
 
   List<Book> getBooksByAuthor(Author author) {
     return allBooks.stream().filter(book -> book.author().equals(author)).toList();
+  }
+
+  public record AuthorWithCounts(String name, String slug, long count) {}
+
+  List<AuthorWithCounts> findAuthorsByBookCount() {
+    return allBooks.stream()
+        .map(Book::author)
+        .collect(groupingBy(identity(), counting()))
+        .entrySet()
+        .stream()
+        .map(e -> new AuthorWithCounts(e.getKey().fullName(), e.getKey().slug(), e.getValue()))
+        .sorted(comparing(AuthorWithCounts::count, reverseOrder()))
+        .toList();
   }
 
   private static Predicate<String> isNotBlank() {

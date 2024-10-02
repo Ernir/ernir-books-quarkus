@@ -15,10 +15,10 @@
         {#for book in books}
             <tr>
                 <th scope="row">
-                    <a href="/books/{book.id}">{book.titleShort}</a>
+                    <a href="/{book.id}">{book.titleShort}</a>
                 </th>
                 <td>
-                    <a href="/books/authors/{book.author.slug}">{book.authorFullName}</a>
+                    <a href="/authors/{book.author.slug}">{book.authorFullName}</a>
                 </td>
                 <td>
                     {book.seriesName} {#if book.seriesPosition.isPresent()}(#{book.seriesPosition}){/if}
