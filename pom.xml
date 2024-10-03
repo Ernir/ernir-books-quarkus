@@ -72,6 +72,10 @@
             <artifactId>slugify</artifactId>
             <version>3.0.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
